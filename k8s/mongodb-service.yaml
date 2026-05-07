@@ -1,0 +1,14 @@
+# ── MongoDB Service ───────────────────────────────────────────────────────────
+# ClusterIP = internal only (DB should NOT be exposed outside the cluster)
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb-service             # backend connects using this exact name
+spec:
+  type: ClusterIP                   # internal service — not reachable from outside
+  selector:
+    app: mongodb
+  ports:
+    - protocol: TCP
+      port: 27017
+      targetPort: 27017

@@ -1,0 +1,33 @@
+# ── MongoDB Persistent Volume & Claim ────────────────────────────────────────
+# PV = a piece of storage in the cluster (like a physical hard drive partition)
+# PVC = a request for storage by a pod (like "I need 1GB of space")
+# This ensures MongoDB data survives pod restarts and rescheduling
+
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: mongo-pv
+  labels:
+    type: local
+spec:
+  storageClassName: manual
+  capacity:
+    storage: 1Gi                     # 1 GB — enough for a demo
+  accessModes:
+    - ReadWriteOnce                  # only one pod can write at a time
+  hostPath:
+    path: "/mnt/data/mongodb"        # path on the Minikube node's filesystem
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mongo-pvc
+spec:
+  storageClassName: manual
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi                   # must match or be ≤ the PV capacity

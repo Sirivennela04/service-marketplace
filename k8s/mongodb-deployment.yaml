@@ -1,0 +1,37 @@
+# ── MongoDB Deployment ────────────────────────────────────────────────────────
+# Uses PersistentVolumeClaim instead of emptyDir so data survives pod restarts
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongodb-deployment
+  labels:
+    app: mongodb
+spec:
+  replicas: 1                        # only 1 DB replica (standard for dev/demo)
+  selector:
+    matchLabels:
+      app: mongodb
+  template:
+    metadata:
+      labels:
+        app: mongodb
+    spec:
+      containers:
+        - name: mongodb
+          image: mongo:6.0            # official MongoDB image from Docker Hub
+          ports:
+            - containerPort: 27017
+          resources:
+            requests:
+              cpu: "100m"
+              memory: "256Mi"
+            limits:
+              cpu: "500m"
+              memory: "512Mi"
+          volumeMounts:
+            - name: mongo-persistent-storage
+              mountPath: /data/db     # where MongoDB stores its data
+      volumes:
+        - name: mongo-persistent-storage
+          persistentVolumeClaim:
+            claimName: mongo-pvc      # binds to our PVC (which binds to PV)

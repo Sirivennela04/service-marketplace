@@ -1,0 +1,62 @@
+version: '3.8'
+
+services:
+  # ── MongoDB Database ─────────────────────────────────────────────────────────
+  mongodb:
+    image: mongo:6.0
+    container_name: servicedb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db # persist data across restarts
+    networks:
+      - service-net
+
+  # ── Backend Node 1 ────────────────────────────────────────────────────────────
+  backend1:
+    build: ./backend
+    container_name: service-backend-1
+    ports:
+      - "3001:3000"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/servicedb
+      - PORT=3000
+    depends_on:
+      - mongodb
+    networks:
+      - service-net
+
+  # ── Backend Node 2 ────────────────────────────────────────────────────────────
+  backend2:
+    build: ./backend
+    container_name: service-backend-2
+    ports:
+      - "3002:3000"
+    environment:
+      - MONGO_URL=mongodb://mongodb:27017/servicedb
+      - PORT=3000
+    depends_on:
+      - mongodb
+    networks:
+      - service-net
+
+  # ── Frontend (Node.js Static) ────────────────────────────────────────────────
+  frontend:
+    build: ./frontend
+    container_name: service-frontend
+    ports:
+      - "8080:8080"
+    depends_on:
+      - backend1
+      - backend2
+    networks:
+      - service-net
+
+# ── Shared network ───────────────────────────────────────────────────────────
+networks:
+  service-net:
+    driver: bridge
+
+# ── Named volume ─────────────────────────────────────────────────────────────
+volumes:
+  mongo-data:

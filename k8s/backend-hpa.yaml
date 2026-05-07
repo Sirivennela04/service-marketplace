@@ -1,0 +1,29 @@
+# ── Horizontal Pod Autoscaler (HPA) ──────────────────────────────────────────
+# HPA automatically adjusts replica count based on CPU/memory utilization
+# Requires: metrics-server addon (minikube addons enable metrics-server)
+# It checks metrics every 15 seconds and scales pods up/down accordingly
+
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: backend-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend-deployment          # the Deployment this HPA controls
+  minReplicas: 2                      # minimum pods (fault tolerance)
+  maxReplicas: 10                     # maximum pods under heavy load
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50      # scale up when avg CPU > 50%
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          type: Utilization
+          averageUtilization: 70      # scale up when avg memory > 70%

@@ -1,0 +1,15 @@
+# ── Backend Service ───────────────────────────────────────────────────────────
+# Exposes the backend pods so they can be accessed from outside the cluster
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend-service
+spec:
+  type: NodePort             # NodePort = accessible from your browser/Postman
+  selector:
+    app: backend             # routes traffic to pods with label app=backend
+  ports:
+    - protocol: TCP
+      port: 3000             # port inside the cluster
+      targetPort: 3000       # port on the pod
+      nodePort: 30080        # port on your machine (access at localhost:30080)

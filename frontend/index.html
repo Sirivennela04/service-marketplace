@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="description" content="Smart Service Marketplace — book trusted local service providers for plumbing, electrical, cleaning, tutoring and more."/>
+  <title>Smart Service Marketplace</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<nav class="navbar">
+  <div class="logo">⚡ ServiceHub</div>
+  <div class="nav-links">
+    <button class="active" onclick="showPage('dashboard')">Dashboard</button>
+    <button onclick="showPage('services')">Services</button>
+    <button onclick="showPage('requests')">Requests</button>
+    <button onclick="showPage('providers')">Providers</button>
+  </div>
+</nav>
+
+<div class="container">
+
+  <!-- ═══ DASHBOARD ═══ -->
+  <div id="page-dashboard" class="page active">
+    <h1 style="font-size:1.6rem;margin-bottom:20px">📊 Dashboard</h1>
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="card"><h2>📈 Recent Activity</h2><div id="recent-activity"></div></div>
+  </div>
+
+  <!-- ═══ SERVICES ═══ -->
+  <div id="page-services" class="page">
+    <h1 style="font-size:1.6rem;margin-bottom:20px">🛠️ Browse Services</h1>
+    <div class="cat-grid" id="cat-grid"></div>
+
+    <div class="card" style="margin-top:28px">
+      <h2>📋 Book a Service</h2>
+      <div class="form-row">
+        <div class="form-group"><label>Your Name *</label><input id="f-name" placeholder="e.g. Siri"/></div>
+        <div class="form-group"><label>Email</label><input id="f-email" type="email" placeholder="you@email.com"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone</label><input id="f-phone" placeholder="9876543210"/></div>
+        <div class="form-group"><label>Service Category *</label>
+          <select id="f-service"><option value="">-- Select --</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label>Description</label><textarea id="f-desc" placeholder="Describe what you need..."></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Location</label><input id="f-loc" placeholder="e.g. Gachibowli"/></div>
+        <div class="form-group"><label>Urgency</label>
+          <select id="f-urgency"><option value="Low">Low</option><option value="Medium" selected>Medium</option><option value="High">High</option><option value="Emergency">🚨 Emergency</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Budget (₹)</label><input id="f-budget" type="number" placeholder="500"/></div>
+        <div class="form-group"><label>Preferred Date</label><input id="f-date" type="date"/></div>
+      </div>
+      <button class="btn btn-primary" onclick="submitRequest()">🚀 Submit Request</button>
+    </div>
+  </div>
+
+  <!-- ═══ REQUESTS ═══ -->
+  <div id="page-requests" class="page">
+    <h1 style="font-size:1.6rem;margin-bottom:20px">📦 Service Requests</h1>
+    <div class="filter-bar">
+      <select id="filter-status" onchange="loadRequests()"><option value="">All Status</option><option>Pending</option><option>Accepted</option><option>In Progress</option><option>Completed</option><option>Cancelled</option></select>
+      <select id="filter-urgency" onchange="loadRequests()"><option value="">All Urgency</option><option>Low</option><option>Medium</option><option>High</option><option>Emergency</option></select>
+      <div style="flex:1"></div>
+      <button class="btn btn-outline btn-sm" onclick="loadRequests()">🔄 Refresh</button>
+    </div>
+    <div id="requests-list"></div>
+  </div>
+
+  <!-- ═══ PROVIDERS ═══ -->
+  <div id="page-providers" class="page">
+    <h1 style="font-size:1.6rem;margin-bottom:20px">👥 Service Providers</h1>
+    <div class="search-bar">
+      <input id="prov-search" placeholder="Search by skill or name..." onkeyup="loadProviders()"/>
+      <button class="btn btn-outline" onclick="loadProviders()">🔍</button>
+    </div>
+    <div class="prov-grid" id="prov-grid"></div>
+    <div class="card" style="margin-top:28px">
+      <h2>➕ Register as Provider</h2>
+      <div class="form-row">
+        <div class="form-group"><label>Name *</label><input id="p-name" placeholder="Your business name"/></div>
+        <div class="form-group"><label>Email *</label><input id="p-email" type="email" placeholder="you@email.com"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Phone</label><input id="p-phone" placeholder="9876543210"/></div>
+        <div class="form-group"><label>Location</label><input id="p-loc" placeholder="e.g. Hyderabad"/></div>
+      </div>
+      <div class="form-group"><label>Skills (comma separated)</label><input id="p-skills" placeholder="Plumbing, Electrical"/></div>
+      <div class="form-group"><label>Bio</label><textarea id="p-bio" placeholder="Tell customers about your experience..."></textarea></div>
+      <button class="btn btn-success" onclick="registerProvider()">✅ Register</button>
+    </div>
+  </div>
+
+  <!-- API Config (hidden by default, toggle with Ctrl+Shift+A) -->
+  <div id="api-config" style="display:none" class="card" >
+    <h2>⚙️ API</h2>
+    <input id="api-url" value="http://localhost:3000"/>
+    <button class="btn btn-outline btn-sm" onclick="seedData()">🌱 Seed Demo Data</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

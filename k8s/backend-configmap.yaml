@@ -1,0 +1,10 @@
+# ── Backend ConfigMap ────────────────────────────────────────────────────────
+# ConfigMap stores NON-SENSITIVE configuration as key-value pairs
+# Keeps config separate from code — a Kubernetes best practice (12-factor app)
+
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+data:
+  PORT: "3000"                       # the port our Express server listens on
